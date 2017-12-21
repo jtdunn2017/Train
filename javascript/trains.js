@@ -11,7 +11,7 @@ var config = {
 };
 firebase.initializeApp(config);
 var database = firebase.database();
-
+// Debug
 console.log("Database initialized");
 //====== capture submit button ====
 $("#addTrain").on("click", function (event) {
@@ -23,12 +23,14 @@ $("#addTrain").on("click", function (event) {
   var trainName = $("#trainName").val().trim(); //Trim unecessary spaces
   var trainDestination = $("#trainDestination").val().trim();
   var trainFrequency = $("#trainFrequency").val().trim();
-  var trainNext = $("#trainNext").val().trim();
+  var trainNextArrival = $("#trainNext").val().trim();
+
+  // Debug
   console.log("screen inputs captured");
   console.log("Name: " + trainName);
   console.log("Dest: " + trainDestination);
   console.log("Freq: " + trainFrequency);
-  console.log("Next Train: " + trainNext);
+  console.log("Next Train: " + trainNextArrival);
   // Store new train info object
   /*  var newTrain = {
       name: trainName,
@@ -43,15 +45,15 @@ $("#addTrain").on("click", function (event) {
     name: trainName,
     dest: trainDestination,
     frequency: trainFrequency,
-    nextTime: trainNext
+    nextArrival: trainNextArrival
   });
 
 
-
-  console.log("Name: " + newTrain.trainName);
-  console.log("Dest: " + newTrain.trainDestination);
-  console.log("Freq: " + newTrain.trainFrequency);
-  console.log("Next Train: " + newTrain.trainNext);
+// Debug
+  console.log("Name: " + trainName);
+  console.log("Dest: " + trainDestination);
+  console.log("Freq: " + trainFrequency);
+  console.log("Next Train: " + trainNextArrival);
 
   // Alert
   alert("Train schedule added");
@@ -64,22 +66,30 @@ $("#addTrain").on("click", function (event) {
 
 
 });
+// Update htnl
 database.ref().on("child_added", function (childSnapshot, prevChildKey) {
+ var newTrainName=childSnapshot.val().name;
+ var newDestination=childSnapshot.val().dest;
+ var newFrequency=childSnapshot.val().frequency;
+ var newArrival=childSnapshot.val().nextArrival;
+  
 
-  console.log("Snapshot Info: " + childSnapshot);
+  console.log("Snapshot Info: " + childSnapshot.Val());
   //calculations needed
-  var trainNextFormatted = moment(childSnapshot.val().trainNext, "hh:mm").subtract(1, "days");
-  var timeDiff = moment().diff(moment(trainNextFormatted), "minutes");
+  var nextArrivalFormatted = moment(childSnapshot.val().trainNextArrival, "hh:mm").subtract(1, "days");
+  console.log("Next arrival: " + moment(nextArrivalFormatted).format("hh:mm"));
+  var timeDiff = moment().diff(moment(nextArrivalFormatted), "minutes");
   console.log("Difference in time: " + timeDiff);
   var remainder = timeDiff % childSnapshot.val().frequency;
   console.log("Remainder: " + remainder);
-  var trainWaitFormatted = childSnapshot.val().frequency - remainder;
+  var trainWaitTime = childSnapshot.val().frequency - remainder;
   console.log("Time till Train: " + trainWaitFormatted);
-  var nextTimeFormatted = moment().add(trainWait, "minutes");
-  console.log("Next arrival: " + moment(nexttimeFormatted).format("hh:mm"));
+  var trainWaitFormatted = moment().add(trainWait, "minutes");
+  console.log("Time till Train: " + trainWaitFormatted);
+  
 
   // Add each train's data into the table
-  $("#trainDetails").append("<tr><td>" + childSnapshot.val().trainName + "</td><td>" + childSnapshot.val().trainDestination + "</td><td>" +
-    childSnapshot.val().trainFrequency + "</td><td>" + moment(trainNext).format("hh:mm") + "</td><td>" + trainWait + "</td></tr>");
+  $("#trainDetails").append("<tr><td>" + newTrainName + "</td><td>" + newDestination + "</td><td>" +
+    newFrequency + "</td><td>" + moment(newArricval).format("hh:mm") + "</td><td>" + trainWaitFormatted + "</td></tr>");
 });
 
