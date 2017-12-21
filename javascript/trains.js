@@ -14,9 +14,10 @@ var database = firebase.database();
 
 console.log("Database initialized");
 //====== capture submit button ====
-$("#addTrain").on("click", function (childSnapshot, prevChildKey) {
+$("#addTrain").on("click", function (event) {
   // Don't refresh the page!
-  console.log("Snapshot Info: " + childSnapshot);
+  event.preventDefault();
+  
 
   //  Capture new train info.
   var trainName = $("#trainName").val().trim(); //Trim unecessary spaces
@@ -63,7 +64,9 @@ $("#addTrain").on("click", function (childSnapshot, prevChildKey) {
 
 
 });
-database.ref().on("child_added", function (childSnapshot) {
+database.ref().on("child_added", function (childSnapshot, prevChildKey) {
+
+  console.log("Snapshot Info: " + childSnapshot);
   //calculations needed
   var trainNextFormatted = moment(childSnapshot.val().trainNext, "hh:mm").subtract(1, "days");
   var timeDiff = moment().diff(moment(trainNextFormatted), "minutes");
