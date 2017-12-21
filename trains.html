@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+
+    <meta charset="UTF-8">
+    <title>Timesheet</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
+        crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery.js"></script>
+    
+        <script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script> 
+        
+    <link rel "stylesheet" href="employees.css">
+
+</head>
+<body>
+
+<div class="container">
+    <div class="jumbotron">
+        <h1><strong>Employee Data Management</strong></h1>
+        <h2>A Comprehensive Directory of Employee Billable Hours</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="table" class="table-heading">
+            <h2><strong>Current Employees</strong>
+            </h2>   
+        </div>
+    </div>
+</div>
+</div>
+
+<div class="panel panel-default">
+    <div class="add-emp">
+        Basic panel example
+    </div>
+</div>
+
+
+<!--   Logic below -->
+<script>
+
+// Initialize Firebase
+var config = {
+   apiKey: "AIzaSyCuMdKVGlrhYeW3E0Acn-Fs4r76e3q0Crk",
+   authDomain: "bootcamp-62054.firebaseapp.com",
+   databaseURL: "https://bootcamp-62054.firebaseio.com",
+   projectId: "bootcamp-62054",
+   storageBucket: "bootcamp-62054.appspot.com",
+   messagingSenderId: "262852101163"
+ };
+
+firebase.initializeApp(config);
+
+// setup variables
+var db=firebase.database();
+var ename="";
+var erole="";
+var erate=0;
+var edate="";
+var mworked =0;
+var amtbilled =0;
+
+//====== capture submit button ====
+  $("#add-user").on("click", function() {
+      // Don't refresh the page!
+      event.preventDefault();
+
+ // Code in the logic for storing and retrieving the most recent user.
+        ename = $('#name').val().trim(); //Trim unecessary spaces
+        erole = $('#role').val().trim();
+        edate = $('#date-started').val().trim();
+        erate  = $('#rate').val().trim();
+
+      // Don't forget to provide initial data to your Firebase database.
+      db.ref().push({
+        name: ename,
+        role: erole,
+        rate: erate,
+        date: edate,
+        dateAdded : firebase.database.Servervalue.TIMESTAMP
+      });
+    });
+
+   
+db.ref().ordrByChildonvalue",function(snapshot) {
+    console.log(snapshot.val());
+    $('#name').text(snapshot.val().name);
+    $('#role').text(snapshot.val().role);
+    $('#rate').text(snapshot.val().erate);
+    $('#date-started').text(snapshot.val().edate);
+
+
+},
+
+function(errorObject) {
+      console.log("The read failed: " + errorObject.code);
+});
+</script>
+</body>
+</html>
